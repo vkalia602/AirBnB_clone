@@ -135,3 +135,21 @@ class TestBaseModel(unittest.TestCase):
         model = BaseModel()
         model_dict = model.to_dict()
         self.assertEqual(type(model_dict['updated_at']) is str, True)
+
+    def test_new_instance_assigns_attributes_from_kwargs(self):
+        """tests that new instances can create attrs from kwargs"""
+        model = BaseModel(name='Michael Jordan')
+        self.assertEqual(model.name, 'Michael Jordan')
+
+    def test_key_and_val_from_kwargs_is_and_attribute(self):
+        """tests that kwargs gets attributes for an instance"""
+        model = BaseModel(name='Michael Jordan', age=60, points=23.45)
+        self.assertEqual(model.age, 60)
+        self.assertEqual(model.name, 'Michael Jordan')
+        self.assertEqual(model.points, 23.45)
+
+    def test_created_at_does_not_change_if_kwarg_is_created_at(self):
+        """tests that created_at doesn't change is created_at is a kwarg"""
+        model = BaseModel(created_at='last tuesday', updated_at='friday')
+        self.assertNotEqual(model.created_at, 'last tuesday')
+        self.assertNotEqual(model.updated_at, 'friday')

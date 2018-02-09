@@ -7,11 +7,18 @@ import datetime
 
 class BaseModel:
     """BaseModel Class"""
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """BaseModel constructor"""
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
+        # we don't want the datetime attrs to get updated via a kwarg
+        invalid_keys = {'created_at', 'updated_at'}
+        filtered_kwargs = {}
+        for k, v in kwargs.items():
+            if k not in invalid_keys:
+                filtered_kwargs[k] = v
+        self.__dict__.update(kwargs)
 
     def __str__(self):
         """string representation of a BaseModel object"""

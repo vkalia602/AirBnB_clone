@@ -5,6 +5,7 @@ import unittest
 import datetime
 from models.base_model import BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
 
     """BaseModel unit tests"""
@@ -94,7 +95,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(created1 == created2, True)
 
     def test_updated_at_changes_each_time_save_is_called(self):
-        """tests that save() changes updated_at attribute with multiple calls"""
+        """tests that save() changes updated_at attr with multiple calls"""
         model = BaseModel()
         model.save()
         update1 = model.updated_at

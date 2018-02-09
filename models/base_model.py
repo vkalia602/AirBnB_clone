@@ -13,17 +13,16 @@ class BaseModel:
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
-        # for new instances not from a dict (kwargs), call storage.new()
-        if len(kwargs) == 0:
-            storage.new(self.to_dict())
-            return
         # we don't want the datetime attrs to get updated via a kwarg
         invalid_keys = {'created_at', 'updated_at'}
         filtered_kwargs = {}
         for k, v in kwargs.items():
             if k not in invalid_keys:
                 filtered_kwargs[k] = v
-        self.__dict__.update(kwargs)
+        self.__dict__.update(filtered_kwargs)
+        # for new instances not from a dict (kwargs), call storage.new()
+        if len(kwargs) == 0:
+            storage.new(self.to_dict())
 
     def __str__(self):
         """string representation of a BaseModel object"""
@@ -37,7 +36,10 @@ class BaseModel:
 
     def to_dict(self):
         """returns a dict containing all key/vals of the instance"""
-        self.__dict__['__class__'] = type(self).__name__
-        self.__dict__['created_at'] = self.created_at.isoformat()
-        self.__dict__['updated_at'] = self.updated_at.isoformat()
-        return self.__dict__
+        json_dict = {}
+        for k,v in self.__dict__.items():
+            json_dict[k] = v
+        json_dict['__class__'] = type(self).__name__
+        json_dict['created_at'] = self.created_at.isoformat()
+        json_dict['updated_at'] = self.updated_at.isoformat()
+        return json_dict

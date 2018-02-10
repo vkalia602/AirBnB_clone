@@ -17,7 +17,8 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, token):
         """creates a new instance of BaseModel, saves it to JSON file and prints
         the id of the BaseModel instance"""
-        if token == "": print('** class name missing **')
+        if token == "":
+            print('** class name missing **')
         elif token not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
@@ -39,7 +40,8 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     with open(storage.file_path, encoding='utf-8') as f:
                         data = json.load(f)
-                except FileNotFoundError: data = None
+                except FileNotFoundError:
+                    data = None
                 if data:
                     clas = tokens[0]
                     uuid = tokens[1]
@@ -48,8 +50,8 @@ class HBNBCommand(cmd.Cmd):
                         obj_dict = data[key]
                         obj = BaseModel(**obj_dict)
                         print(obj)
-                else:
-                    print('** no instance found **')
+                    else:
+                        print('** no instance found **')
 
     def do_destroy(self, line):
         """deletes an instance based on the class name and id and saves the
@@ -65,7 +67,8 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     with open(storage.file_path, encoding='utf-8') as f:
                         data = json.load(f)
-                except FileNotFoundError: data = None
+                except FileNotFoundError:
+                    data = None
                 if data:
                     clas = tokens[0]
                     uuid = tokens[1]
@@ -74,8 +77,8 @@ class HBNBCommand(cmd.Cmd):
                         del data[key]
                         storage.objects = data
                         storage.save()
-                else:
-                    print('** no instance found **')
+                    else:
+                        print('** no instance found **')
 
     def do_all(self, line):
         """prints all string representation of all instances based or not on the
@@ -83,7 +86,8 @@ class HBNBCommand(cmd.Cmd):
         try:
             with open(storage.file_path, encoding='utf-8') as f:
                 data = json.load(f)
-        except FileNotFoundError: data = None
+        except FileNotFoundError:
+            data = None
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if data:
             storage.reload()
@@ -113,7 +117,8 @@ class HBNBCommand(cmd.Cmd):
             try:
                 with open(storage.file_path, encoding='utf-8') as f:
                     data = json.load(f)
-            except FileNotFoundError: data = None
+            except FileNotFoundError:
+                data = None
             if data:
                 for instance in data.values():
                     if instance['id'] == tokens[1]:
@@ -132,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
                             storage.objects[key] = instance
                             storage.save()
                             return
-                print('** no instance found **')
+            print('** no instance found **')
 
     def do_EOF(self, line):
         """exits the console program on EOF"""
@@ -141,7 +146,6 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, line):
         """exits the console program if user enters 'quit'"""
         return True
-
 
 
 if __name__ == '__main__':

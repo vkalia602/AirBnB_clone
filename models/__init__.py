@@ -4,4 +4,4 @@
 from .engine.file_storage import FileStorage
 
 storage = FileStorage('file.json', {})
-storage.reload()
+storage.reload()    # sets storage.objects to a json dict

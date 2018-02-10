@@ -14,15 +14,15 @@ class BaseModel:
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
         # for new instances not from a dict (kwargs), call storage.new()
-        if len(kwargs) == 0:
-            storage.new(self.to_dict())
+        storage.new(self.to_dict())
         # we don't want the datetime attrs to get updated via a kwarg
-        invalid_keys = {'created_at', 'updated_at'}
-        filtered_kwargs = {}
-        for k, v in kwargs.items():
-            if k not in invalid_keys:
-                filtered_kwargs[k] = v
-        self.__dict__.update(filtered_kwargs)
+        if kwargs:
+            invalid_keys = {'created_at', 'updated_at'}
+            filtered_kwargs = {}
+            for k, v in kwargs.items():
+                if k not in invalid_keys:
+                    filtered_kwargs[k] = v
+            self.__dict__.update(filtered_kwargs)
 
     def __str__(self):
         """string representation of a BaseModel object"""
@@ -36,8 +36,8 @@ class BaseModel:
 
     def save(self):
         """updates the updated_at attr with current datetime"""
-        storage.save()
         self.updated_at = datetime.datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns a dict containing all key/vals of the instance"""

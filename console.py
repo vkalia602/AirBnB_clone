@@ -22,7 +22,8 @@ class HBNBCommand(cmd.Cmd):
         elif token not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
-            new = BaseModel()
+            if token == 'BaseModel':
+                new = BaseModel()
             new.save()
             print(new.id)
 
@@ -52,6 +53,8 @@ class HBNBCommand(cmd.Cmd):
                         print(obj)
                     else:
                         print('** no instance found **')
+                if len(tokens) > 0 and data is None:
+                    print('** no instance found **')
 
     def do_destroy(self, line):
         """deletes an instance based on the class name and id and saves the
@@ -90,14 +93,18 @@ class HBNBCommand(cmd.Cmd):
             data = None
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if data:
-            storage.reload()
+            models = []
             clas = tokens[0] if len(tokens) > 0 else None
             for k, v in data.items():
                 if clas == 'BaseModel' or clas is None:
-                    print(BaseModel(**v))
+                    models.append(BaseModel(**v))
                 else:
                     print('** class doesn\'t exist **')
                     return
+            print(models)
+        if len(tokens) > 0 and data is None:
+            if tokens[0] not in HBNBCommand.valid_classes:
+                print('** class doesn\'t exist **')
 
     def do_update(self, line):
         """updates an instance based on the class name and id by adding or

@@ -14,20 +14,11 @@ class HBNBCommand(cmd.Cmd):
     valid_classes = {'BaseModel'}
     # ^^^^ used to check arguments of create() and show()
 
-    def do_EOF(self, arg):
-        """exits the console program on EOF"""
-        return True
-
-    def do_quit(self, arg):
-        """exits the console program if user enters 'quit'"""
-        return True
-
-    def do_create(self, arg):
-        """creates a new instance of BaseModel, saves it to JSON file and prints the
-        id of the BaseModel instance"""
-        if arg == "":
-            print('** class name missing **')
-        elif arg not in HBNBCommand.valid_classes:
+    def do_create(self, token):
+        """creates a new instance of BaseModel, saves it to JSON file and prints
+        the id of the BaseModel instance"""
+        if token == "": print('** class name missing **')
+        elif token not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
             new = BaseModel()
@@ -37,48 +28,54 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         """prints the string representation of an instance based on the class
         name and id"""
-        if line == "":
+        tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
+        if len(tokens) == 0:
             print('** class name missing **')
-        elif line.split()[0] not in HBNBCommand.valid_classes:
+        elif tokens[0] not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
-            if len(line.split()) > 1:
-                with open(storage.file_path, encoding='utf-8') as f:
-                    data = json.load(f)
-                clas = line.split()[0]
-                instance_id = line.split()[1]
-                key = "{}.{}".format(clas, instance_id)
-                if key in data.keys():
-                    obj_dict = data[key]
-                    obj = BaseModel(**obj_dict)
-                    print(obj)
+            print('** instance id missing **') if len(tokens) < 2 else ""
+            if len(tokens) > 1:
+                try:
+                    with open(storage.file_path, encoding='utf-8') as f:
+                        data = json.load(f)
+                except FileNotFoundError: data = None
+                if data:
+                    clas = tokens[0]
+                    uuid = tokens[1]
+                    key = "{}.{}".format(clas, uuid)
+                    if key in data.keys():
+                        obj_dict = data[key]
+                        obj = BaseModel(**obj_dict)
+                        print(obj)
                 else:
                     print('** no instance found **')
-            elif len(line.split()) < 2:
-                print('** instance id missing **')
 
     def do_destroy(self, line):
         """deletes an instance based on the class name and id and saves the
         changes into the JSON file"""
-        if line == "":
-            print('** class name missing **')
-        elif line.split()[0] not in HBNBCommand.valid_classes:
+        tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
+        if len(tokens) == 0:
+            print('** class name missing **') if len(tokens) == 0 else ""
+        elif tokens[0] not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
-            if len(line.split()) > 1:
-                with open(storage.file_path, encoding='utf-8') as f:
-                    data = json.load(f)
-                clas = line.split()[0]
-                instance_id = line.split()[1]
-                key = "{}.{}".format(clas, instance_id)
-                if key in data.keys():
-                    del data[key]
-                    storage.objects = data
-                    storage.save()
+            print('** instance id missing **') if len(tokens) < 2 else ""
+            if len(tokens) > 1:
+                try:
+                    with open(storage.file_path, encoding='utf-8') as f:
+                        data = json.load(f)
+                except FileNotFoundError: data = None
+                if data:
+                    clas = tokens[0]
+                    uuid = tokens[1]
+                    key = "{}.{}".format(clas, uuid)
+                    if key in data.keys():
+                        del data[key]
+                        storage.objects = data
+                        storage.save()
                 else:
                     print('** no instance found **')
-            elif len(line.split()) < 2:
-                print('** instance id missing **')
 
     def do_all(self, line):
         """prints all string representation of all instances based or not on the
@@ -86,19 +83,65 @@ class HBNBCommand(cmd.Cmd):
         try:
             with open(storage.file_path, encoding='utf-8') as f:
                 data = json.load(f)
-        except FileNotFoundError:
-            data = None
-        if data is not None:
-            if len(line.split()) > 0:
-                clas = line.split()[0]
-            else:
-                clas = None
+        except FileNotFoundError: data = None
+        tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
+        if data:
+            storage.reload()
+            clas = tokens[0] if len(tokens) > 0 else None
             for k, v in data.items():
                 if clas == 'BaseModel' or clas is None:
                     print(BaseModel(**v))
                 else:
                     print('** class doesn\'t exist **')
-                    break
+                    return
+
+    def do_update(self, line):
+        """updates an instance based on the class name and id by adding or
+        updating attribute and saves the change into the JSON file
+
+        usage: update <class name> <id> <attribute name> "<attribute value>"""
+        tokens = line.split()
+        if len(tokens) == 0:
+            print('** class name missing **')
+        # tokens[0] is <class name>
+        elif tokens[0] not in HBNBCommand.valid_classes:
+            print('** class doesn\'t exist **')
+        # tokens[1] is <id>
+        elif len(tokens) < 2:
+            print('** instance id missing **')
+        else:
+            try:
+                with open(storage.file_path, encoding='utf-8') as f:
+                    data = json.load(f)
+            except FileNotFoundError: data = None
+            if data:
+                for instance in data.values():
+                    if instance['id'] == tokens[1]:
+                        if len(tokens) < 3:
+                            print('** attribute name missing **')
+                            return
+                        elif len(tokens) < 4:
+                            print('** value missing **')
+                            return
+                        else:
+                            attr_name = tokens[2]
+                            attr_value = tokens[3]
+                            entry = {attr_name: attr_value}
+                            instance.update(entry)
+                            key = '{}.{}'.format(tokens[0], tokens[1])
+                            storage.objects[key] = instance
+                            storage.save()
+                            return
+                print('** no instance found **')
+
+    def do_EOF(self, line):
+        """exits the console program on EOF"""
+        return True
+
+    def do_quit(self, line):
+        """exits the console program if user enters 'quit'"""
+        return True
+
 
 
 if __name__ == '__main__':

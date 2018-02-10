@@ -13,6 +13,9 @@ class BaseModel:
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
+        # for new instances not from a dict (kwargs), call storage.new()
+        if len(kwargs) == 0:
+            storage.new(self.to_dict())
         # we don't want the datetime attrs to get updated via a kwarg
         invalid_keys = {'created_at', 'updated_at'}
         filtered_kwargs = {}
@@ -20,9 +23,6 @@ class BaseModel:
             if k not in invalid_keys:
                 filtered_kwargs[k] = v
         self.__dict__.update(filtered_kwargs)
-        # for new instances not from a dict (kwargs), call storage.new()
-        if len(kwargs) == 0:
-            storage.new(self.to_dict())
 
     def __str__(self):
         """string representation of a BaseModel object"""

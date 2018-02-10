@@ -42,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
             print('** class doesn\'t exist **')
         else:
             if len(line.split()) > 1:
-                with open(storage.file_path, encoding='UTF-8') as f:
+                with open(storage.file_path, encoding='utf-8') as f:
                     data = json.load(f)
                 clas = line.split()[0]
                 instance_id = line.split()[1]
@@ -56,6 +56,28 @@ class HBNBCommand(cmd.Cmd):
             elif len(line.split()) < 2:
                 print('** instance id missing **')
 
+    def do_destroy(self, line):
+        """deletes an instance based on the class name and id and saves the
+        changes into the JSON file"""
+        if line == "":
+            print('** class name missing **')
+        elif line.split()[0] not in HBNBCommand.valid_classes:
+            print('** class doesn\'t exist **')
+        else:
+            if len(line.split()) > 1:
+                with open(storage.file_path, encoding='utf-8') as f:
+                    data = json.load(f)
+                clas = line.split()[0]
+                instance_id = line.split()[1]
+                key = "{}.{}".format(clas, instance_id)
+                if key in data.keys():
+                    del data[key]
+                    storage.objects = data
+                    storage.save()
+                else:
+                    print('** no instance found **')
+            elif len(line.split()) < 2:
+                print('** instance id missing **')
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

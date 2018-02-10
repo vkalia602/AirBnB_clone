@@ -131,7 +131,16 @@ class HBNBCommand(cmd.Cmd):
                         else:
                             attr_name = tokens[2]
                             attr_value = tokens[3]
-                            entry = {attr_name: attr_value}
+                            # values need to be wrapped in double quotes ("")
+                            attr_values = []
+                            for word in tokens[3:]:
+                                if word[0] == '"':
+                                    attr_values.append(word.replace('"', ''))
+                                elif word[-1 ] == '"':
+                                    attr_values.append(word.replace('"', ''))
+                                else:
+                                    attr_values.append(word)
+                            entry = {attr_name: " ".join(attr_values)}
                             instance.update(entry)
                             key = '{}.{}'.format(tokens[0], tokens[1])
                             storage.objects[key] = instance

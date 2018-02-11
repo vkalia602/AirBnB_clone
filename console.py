@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **') if len(tokens) < 2 else ""
             if len(tokens) > 1:
                 try:
-                    with open(storage.file_path, encoding='utf-8') as f:
+                    with open(storage._FileStorage__file_path, encoding='utf-8') as f:
                         data = json.load(f)
                 except FileNotFoundError:
                     data = None
@@ -61,14 +61,15 @@ class HBNBCommand(cmd.Cmd):
         changes into the JSON file"""
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if len(tokens) == 0:
-            print('** class name missing **') if len(tokens) == 0 else ""
+            print('** class name missing **')
         elif tokens[0] not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
         else:
-            print('** instance id missing **') if len(tokens) < 2 else ""
-            if len(tokens) > 1:
+            if len(tokens) < 2:
+                print('** instance id missing **')
+            elif len(tokens) > 1:
                 try:
-                    with open(storage.file_path, encoding='utf-8') as f:
+                    with open(storage._FileStorage__file_path, encoding='utf-8') as f:
                         data = json.load(f)
                 except FileNotFoundError:
                     data = None
@@ -78,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
                     key = "{}.{}".format(clas, uuid)
                     if key in data.keys():
                         del data[key]
-                        storage.objects = data
+                        storage._FileStorage__objects = data
                         storage.save()
                     else:
                         print('** no instance found **')
@@ -87,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
         """prints all string representation of all instances based or not on the
         class name"""
         try:
-            with open(storage.file_path, encoding='utf-8') as f:
+            with open(storage._FileStorage__file_path, encoding='utf-8') as f:
                 data = json.load(f)
         except FileNotFoundError:
             data = None
@@ -97,6 +98,7 @@ class HBNBCommand(cmd.Cmd):
             clas = tokens[0] if len(tokens) > 0 else None
             for k, v in data.items():
                 if clas == 'BaseModel' or clas is None:
+                    pass
                     models.append(BaseModel(**v))
                 else:
                     print('** class doesn\'t exist **')
@@ -122,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             try:
-                with open(storage.file_path, encoding='utf-8') as f:
+                with open(storage._FileStorage__file_path, encoding='utf-8') as f:
                     data = json.load(f)
             except FileNotFoundError:
                 data = None
@@ -150,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
                             entry = {attr_name: " ".join(attr_values)}
                             instance.update(entry)
                             key = '{}.{}'.format(tokens[0], tokens[1])
-                            storage.objects[key] = instance
+                            storage._FileStorage__objects[key] = instance
                             storage.save()
                             return
             print('** no instance found **')

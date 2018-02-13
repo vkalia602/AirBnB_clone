@@ -12,7 +12,7 @@ from datetime import datetime
 class HBNBCommand(cmd.Cmd):
     """hbnb console class"""
     prompt = '(hbnb) '
-    valid_classes = {'BaseModel'}
+    classes = {'BaseModel'}
     # ^^^^ used to check arguments of create() and show()
 
     def do_create(self, token):
@@ -20,11 +20,10 @@ class HBNBCommand(cmd.Cmd):
         the id of the BaseModel instance"""
         if token == "":
             print('** class name missing **')
-        elif token not in HBNBCommand.valid_classes:
+        elif token not in self.classes:
             print('** class doesn\'t exist **')
         else:
-            if token == 'BaseModel':
-                new = BaseModel()
+            new = eval(token)()
             new.save()
             print(new.id)
 
@@ -34,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if len(tokens) == 0:
             print('** class name missing **')
-        elif tokens[0] not in HBNBCommand.valid_classes:
+        elif tokens[0] not in self.classes:
             print('** class doesn\'t exist **')
         elif len(tokens) < 2:
             print('** instance id missing **')
@@ -65,7 +64,7 @@ class HBNBCommand(cmd.Cmd):
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if len(tokens) == 0:
             print('** class name missing **')
-        elif tokens[0] not in HBNBCommand.valid_classes:
+        elif tokens[0] not in self.classes:
             print('** class doesn\'t exist **')
         else:
             if len(tokens) < 2:
@@ -98,20 +97,26 @@ class HBNBCommand(cmd.Cmd):
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if data:
             models = []
-            clas = tokens[0] if len(tokens) > 0 else None
-            #print(data)
-            for k, v in data.items():
-                del v['__class__']
-                if clas == 'BaseModel' or clas is None:
-                    pass
-                    models.append(BaseModel(**v))
+            if len(tokens) > 0 and tokens[0] in self.classes:
+                class_name = tokens[0]
+            else:
+                class_name = None
+            for key, val in data.items():
+                if class_name in self.classes or class_name is None:
+                    if class_name is not None:
+                        del val['__class__']
+                        model = eval(class_name)(**val)
+                    else:
+                        class_name = val['__class__']
+                        del val['__class__']
+                        model = eval(class_name)(**val)
+                    models.append(model)
                 else:
                     print('** class doesn\'t exist **')
                     return
             print(models)
         if len(tokens) > 0 and data is None:
-            if tokens[0] not in HBNBCommand.valid_classes:
-                print('** class doesn\'t exist **')
+            print('** class doesn\'t exist **')
 
     def do_update(self, line):
         """updates an instance based on the class name and id by adding or
@@ -122,7 +127,7 @@ class HBNBCommand(cmd.Cmd):
         if len(tokens) == 0:
             print('** class name missing **')
         # tokens[0] is <class name>
-        elif tokens[0] not in HBNBCommand.valid_classes:
+        elif tokens[0] not in self.classes:
             print('** class doesn\'t exist **')
         # tokens[1] is <id>
         elif len(tokens) < 2:

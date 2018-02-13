@@ -70,7 +70,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(type(storage), FileStorage)
 
     def test_objects_attr_keys_include_its_class(self):
-        """tests that the key in __objects is the name of the instances' class"""
+        """tests that the key in __objects is the name of the
+        instances' class"""
         x = BaseModel()
         f = FileStorage()
         key = "{}.{}".format(x.__class__.__name__, x.id)

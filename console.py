@@ -6,6 +6,7 @@ import cmd
 import json
 from models.base_model import BaseModel
 from models import storage
+from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -35,26 +36,28 @@ class HBNBCommand(cmd.Cmd):
             print('** class name missing **')
         elif tokens[0] not in HBNBCommand.valid_classes:
             print('** class doesn\'t exist **')
+        elif len(tokens) < 2:
+            print('** instance id missing **')
         else:
-            print('** instance id missing **') if len(tokens) < 2 else ""
-            if len(tokens) > 1:
-                try:
-                    with open(storage._FileStorage__file_path, encoding='utf-8') as f:
-                        data = json.load(f)
-                except FileNotFoundError:
-                    data = None
-                if data:
-                    clas = tokens[0]
-                    uuid = tokens[1]
-                    key = "{}.{}".format(clas, uuid)
+            try:
+                with open(storage._FileStorage__file_path, encoding='utf-8') as f:
+                    data = json.load(f)
+            except FileNotFoundError:
+                data = None
+                print('** no instance found **')
+                return
+            if data:
+                clas = tokens[0]
+                uuid = tokens[1]
+                key = "{}.{}".format(clas, uuid)
+                for key, val in data.items():
+                    del val['__class__']
                     if key in data.keys():
                         obj_dict = data[key]
                         obj = BaseModel(**obj_dict)
                         print(obj)
-                    else:
-                        print('** no instance found **')
-                if len(tokens) > 0 and data is None:
-                    print('** no instance found **')
+                        return
+            print('** no instance found **')
 
     def do_destroy(self, line):
         """deletes an instance based on the class name and id and saves the
@@ -96,7 +99,9 @@ class HBNBCommand(cmd.Cmd):
         if data:
             models = []
             clas = tokens[0] if len(tokens) > 0 else None
+            #print(data)
             for k, v in data.items():
+                del v['__class__']
                 if clas == 'BaseModel' or clas is None:
                     pass
                     models.append(BaseModel(**v))
@@ -149,8 +154,8 @@ class HBNBCommand(cmd.Cmd):
                                     attr_values.append(word.replace('"', ''))
                                 else:
                                     attr_values.append(word)
-                            entry = {attr_name: " ".join(attr_values)}
-                            instance.update(entry)
+                            instance[attr_name] = " ".join(attr_values)
+                            instance['updated_at'] = datetime.now().isoformat()
                             key = '{}.{}'.format(tokens[0], tokens[1])
                             storage._FileStorage__objects[key] = instance
                             storage.save()
@@ -162,8 +167,12 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_quit(self, line):
-        """exits the console program if user enters 'quit'"""
+        """exits the console program if user enters 'quit'\n"""
         return True
+
+    def emptyline(self):
+        """does nothing when user presses enter"""
+        pass
 
 
 if __name__ == '__main__':

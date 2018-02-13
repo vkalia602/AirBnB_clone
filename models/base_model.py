@@ -2,28 +2,39 @@
 
 """BaseModel module: contains the BaseModel class"""
 import uuid
-import datetime
-from . import storage
+from datetime import datetime
+import models
 
 
 class BaseModel:
     """BaseModel Class"""
+
+
     def __init__(self, *args, **kwargs):
-        """BaseModel constructor"""
+        """BaseModel constructor
+        *args: won't be used
+        **kwargs: a dict representation of an instance:
+            key = attr name
+            val = value of attr name
+        id: uuid random id (needs to be a string)
+        created_at: datetime object
+        updated_at: datetime object
+        """
         self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
-        # we don't want the datetime attrs to get updated via a kwarg
-        if kwargs:
-            invalid_keys = {'created_at', 'updated_at'}
-            filtered_kwargs = {}
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
+        # if loading from json we must convert created_at and updated_at
+        # from strings back into datetime objects
+        if len(kwargs) > 0:
+            datetime_keys = {'created_at', 'updated_at'}
             for k, v in kwargs.items():
-                if k not in invalid_keys:
-                    filtered_kwargs[k] = v
-            self.__dict__.update(filtered_kwargs)
+                if k in datetime_keys:
+                    self.__dict__[k] = datetime.strptime(v,'%Y-%m-%dT%H:%M:%S.%f')
+                else:
+                    self.__dict__[k] = v
         else:
-            # for new instances not from a dict (kwargs), call storage.new()
-            storage.new(self.to_dict())
+            models.storage.new(self)
 
     def __str__(self):
         """string representation of a BaseModel object"""
@@ -37,15 +48,18 @@ class BaseModel:
 
     def save(self):
         """updates the updated_at attr with current datetime"""
-        self.updated_at = datetime.datetime.now()
-        storage.save()
+        self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
-        """returns a dict containing all key/vals of the instance"""
-        json_dict = {}
-        for k,v in self.__dict__.items():
-            json_dict[k] = v
+        """returns a dict containing all key/vals of the instance.
+        this method is called when we prepare the object for json.
+        it produces a dict representation with 'simple object type'
+        of our BaseModel"""
+        json_dict = self.__dict__
         json_dict['__class__'] = type(self).__name__
-        json_dict['created_at'] = self.created_at.isoformat()
-        json_dict['updated_at'] = self.updated_at.isoformat()
+        if type(json_dict['created_at']) is datetime:
+            json_dict['created_at'] = self.created_at.isoformat()
+        if type(json_dict['updated_at']) is datetime:
+            json_dict['updated_at'] = self.updated_at.isoformat()
         return json_dict

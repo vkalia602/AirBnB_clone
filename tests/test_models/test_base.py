@@ -87,7 +87,6 @@ class TestBaseModel(unittest.TestCase):
     def test_updated_at_changes_each_time_save_is_called(self):
         """tests that save() changes updated_at attr with multiple calls"""
         model = BaseModel()
-        model.save()
         update1 = model.updated_at
         model.save()
         update2 = model.updated_at

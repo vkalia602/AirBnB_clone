@@ -16,8 +16,8 @@ class HBNBCommand(cmd.Cmd):
     # ^^^^ used to check arguments of create() and show()
 
     def do_create(self, token):
-        """creates a new instance of BaseModel, saves it to JSON file and prints
-        the id of the BaseModel instance"""
+        """creates a new instance of BaseModel, saves it to JSON file
+        and prints the id of the BaseModel instance"""
         if token == "":
             print('** class name missing **')
         elif token not in self.classes:
@@ -90,8 +90,8 @@ class HBNBCommand(cmd.Cmd):
                         print('** no instance found **')
 
     def do_all(self, line):
-        """prints all string representation of all instances based or not on the
-        class name"""
+        """prints all string representation of all instances based
+        or not on the class name"""
         try:
             with open(storage._FileStorage__file_path, encoding='utf-8') as f:
                 data = json.load(f)

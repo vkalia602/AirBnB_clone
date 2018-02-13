@@ -35,7 +35,8 @@ class HBNBCommand(cmd.Cmd):
         obj_list = storage.all()
         class_uuid = "{}.{}". format(args[0], args[1])
         try:
-           print(obj_list[class_uuid])
+            value = obj_list[class_uuid]
+            print(value)
         except KeyError:
             print("** no instance found **")
 

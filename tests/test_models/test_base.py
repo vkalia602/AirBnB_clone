@@ -61,9 +61,6 @@ class TestBaseModel(unittest.TestCase):
     def test_str_representation_is_formatted_correctly(self):
         """tests that __str__ returns a specific format (see example)"""
         model = BaseModel()
-        # format should look like this:
-        # [<class_name_>] (<self.id>) <self.__dict__>
-        # not sure how to test this since id's will be unique each time.(TODO)
         model_string = str(model)
         self.assertEqual("[BaseModel]" in model_string, True)
         self.assertEqual("id" in model_string, True)

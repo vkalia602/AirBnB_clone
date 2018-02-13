@@ -42,7 +42,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, line):
         args = line.split()
-        data = None
         if args is None or args is "":
             print ("** class name missing **")
         elif args[0] not in self.class_list:
@@ -55,9 +54,13 @@ class HBNBCommand(cmd.Cmd):
         class_uuid = "{}.{}". format(args[0], args[1])
         try:
            del(obj_list[class_uuid])
-           print("destroyed")
         except KeyError:
             print("** no instance found **")
+
+    def all(self, line):
+        args = line.split()
+        if args[0] not in self.class_list:
+            print ("** class doesn\'t exist **")
             
     def emptyline(self):
         """Does not do anything on an emptyline

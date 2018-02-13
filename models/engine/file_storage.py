@@ -17,7 +17,6 @@ class FileStorage():
 
     def new(self, obj):
         x = ("{}.{}".format(obj.__class__.__name__, obj.id))
-        print(obj)
         self.__objects[x] = obj
 
     def save(self):
@@ -34,5 +33,6 @@ class FileStorage():
                     new_object = json.load(my_file)
             for key, value in new_object.items():
                 class_name = value['__class__']
+                del value['__class__']
                 self.__objects[key] = eval(class_name)(**value)
                 

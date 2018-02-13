@@ -49,10 +49,10 @@ class HBNBCommand(cmd.Cmd):
             if data:
                 clas = tokens[0]
                 uuid = tokens[1]
-                key = "{}.{}".format(clas, uuid)
+                keystring = "{}.{}".format(clas, uuid)
                 for key, val in data.items():
                     del val['__class__']
-                    if key in data.keys():
+                    if keystring in data.keys():
                         obj_dict = data[key]
                         obj = BaseModel(**obj_dict)
                         print(obj)

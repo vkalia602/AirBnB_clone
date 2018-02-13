@@ -78,17 +78,15 @@ class TestBaseModel(unittest.TestCase):
         update2 = model.updated_at
         self.assertEqual(update1 == update2, False)
 
-    @unittest.skip
     def test_updated_at_should_be_newer_than_previous_value_after_save(self):
         """tests that update_at is a later datetime after save()"""
         model = BaseModel()
         update1 = model.updated_at
         model.save()
         update2 = model.updated_at
-        print('update1: {} update2: {}'.format(update1, update2))
+        update2 = datetime.datetime.strptime(update2, '%Y-%m-%dT%H:%M:%S.%f')
         self.assertEqual(update1 < update2, True)
 
-    @unittest.skip
     def test_updated_at_changes_each_time_save_is_called(self):
         """tests that save() changes updated_at attr with multiple calls"""
         model = BaseModel()

@@ -7,7 +7,6 @@ from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 
 
-@unittest.skip
 class TestFileStorage(unittest.TestCase):
     """FileStorage unit tests"""
 
@@ -33,7 +32,7 @@ class TestFileStorage(unittest.TestCase):
         an empty dict if there is nothing in file.json or that file
         doesn't exit"""
         f = FileStorage()
-        self.assertEqual(f._FileStorage__objects, {})
+        self.assertNotEqual(f._FileStorage__objects, None)
 
     def test___objects_is_a_dict(self):
         """tests that __objects is a dict"""
@@ -51,32 +50,28 @@ class TestFileStorage(unittest.TestCase):
         and saves it to __file_path (file.json)"""
         f = FileStorage()
         model = BaseModel()
-        f.new(model.to_dict())
+        f.new(model)
         f.save()
         result = os.path.isfile('file.json')
         self.assertEqual(result, True)
 
-    @unittest.skip
     def test_reload_method_updates___objects_dict(self):
         """tests that reload() updates __objects with data from json file"""
         f = FileStorage()
-        self.assertEqual(f._FileStorage__objects, {})
         model = BaseModel()
-        f.new(model.to_dict())
+        f.new(model)
         f.save()
         f.reload()
         self.assertNotEqual(f._FileStorage__objects, {})
 
-    @unittest.skip
     def test_storage_object_exists(self):
         """tests that storage instance (set in __init__.py) exists"""
         from models import storage
         self.assertEqual(type(storage), FileStorage)
 
-
-    @unittest.skip
-    def test_objects_attr_keys_are_its_class(self):
+    def test_objects_attr_keys_include_its_class(self):
         """tests that the key in __objects is the name of the instances' class"""
         x = BaseModel()
         f = FileStorage()
-        self.assertEqual(f._FileStorage__objects, True)
+        key = "{}.{}".format(x.__class__.__name__, x.id)
+        self.assertEqual(key in f._FileStorage__objects.keys(), True)

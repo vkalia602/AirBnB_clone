@@ -15,6 +15,7 @@ class BaseModel():
     """
 
     def __init__(self, *args, **kwargs):
+        """BaseModel instance constructor"""
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if key in ["created_at", "updated_at"]:

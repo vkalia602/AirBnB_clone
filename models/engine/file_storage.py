@@ -26,7 +26,6 @@ class FileStorage:
 
     def save(self):
         """serializes __objects to the JSON file __file_path"""
-        # turn __objects into dict reps
         json_dict = {}
         for keystring, obj in self.__objects.items():
             if type(obj) is not dict:

@@ -47,4 +47,4 @@ class FileStorage:
         for key, val in new_object.items():
             class_name = val['__class__']
             del val['__class__']
-            self.__objects[key] = eval(class_name)(**val) 
+            self.__objects[key] = eval(class_name)(**val)

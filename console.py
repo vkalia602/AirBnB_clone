@@ -39,7 +39,8 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             try:
-                with open(storage._FileStorage__file_path, encoding='utf-8') as f:
+                with open(storage._FileStorage__file_path, encoding='utf-8')
+                as f:
                     data = json.load(f)
             except FileNotFoundError:
                 data = None
@@ -71,7 +72,9 @@ class HBNBCommand(cmd.Cmd):
                 print('** instance id missing **')
             elif len(tokens) > 1:
                 try:
-                    with open(storage._FileStorage__file_path, encoding='utf-8') as f:
+                    with
+                    open(storage._FileStorage__file_path, encoding='utf-8')
+                    as f:
                         data = json.load(f)
                 except FileNotFoundError:
                     data = None
@@ -134,7 +137,8 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             try:
-                with open(storage._FileStorage__file_path, encoding='utf-8') as f:
+                with
+                open(storage._FileStorage__file_path, encoding='utf-8') as f:
                     data = json.load(f)
             except FileNotFoundError:
                 data = None
@@ -155,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
                             for word in tokens[3:]:
                                 if word[0] == '"':
                                     attr_values.append(word.replace('"', ''))
-                                elif word[-1 ] == '"':
+                                elif word[-1] == '"':
                                     attr_values.append(word.replace('"', ''))
                                 else:
                                     attr_values.append(word)

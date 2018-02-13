@@ -3,11 +3,61 @@
 """
 
 import cmd
-
-
+import json
+from  models.base_model import BaseModel
+from models import storage
+import sys
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
+    class_list = ('BaseModel')
 
+    def do_create(self, arg):
+        if arg is None or arg is "":
+            print ("** class name missing **")
+        elif arg in self.class_list:
+            new = eval(arg)()
+            new.save()
+            print (new.id)
+        else:
+            print("** class doesn\'t exist **")
+
+    def do_show(self, line):
+        args = line.split()
+        data = None
+        if args is None or args is "":
+            print ("** class name missing **")
+        elif args[0] not in self.class_list:
+            print ("** class doesn\'t exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        elif args[1] is None or args[1] is "":
+            print("** instance id missing **")
+        obj_list = storage.all()
+        class_uuid = "{}.{}". format(args[0], args[1])
+        try:
+           print(obj_list[class_uuid])
+        except KeyError:
+            print("** no instance found **")
+
+    def do_destroy(self, line):
+        args = line.split()
+        data = None
+        if args is None or args is "":
+            print ("** class name missing **")
+        elif args[0] not in self.class_list:
+            print ("** class doesn\'t exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        elif args[1] is None or args[1] is "":
+            print("** instance id missing **")
+        obj_list = storage.all()
+        class_uuid = "{}.{}". format(args[0], args[1])
+        try:
+           del(obj_list[class_uuid])
+           print("destroyed")
+        except KeyError:
+            print("** no instance found **")
+            
     def emptyline(self):
         """Does not do anything on an emptyline
         """

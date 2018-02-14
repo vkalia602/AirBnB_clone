@@ -55,6 +55,12 @@ class BaseModel():
         """
         Method that creates a dictionary representation of an instance
         """
+        my_dict = self.__dict__
+        my_dict['__class__'] = self.__class__.__name__
+        my_dict['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        my_dict['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        return my_dict
+        """lee
         json_dict = self.__dict__
         json_dict['__class__'] = type(self).__name__
         if type(json_dict['created_at']) is datetime:
@@ -62,3 +68,4 @@ class BaseModel():
         if type(json_dict['updated_at']) is datetime:
             json_dict['updated_at'] = self.updated_at.isoformat()
         return json_dict
+        """

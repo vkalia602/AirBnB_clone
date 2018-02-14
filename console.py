@@ -209,6 +209,7 @@ class HBNBCommand(cmd.Cmd):
                             storage._FileStorage__objects[key] = instance
                             storage.save()
                             return
+                else:
                     print('** no instance found **')
 
     def do_EOF(self, line):

@@ -1,4 +1,4 @@
-## AirBnB Clone
+## 0x00 AirBnB Clone\
 ![hbnb logo](https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/263/HBTN-hbnb-Final.png)
-The goal of this project is to create and deploy a simple copy of the [AirBnB
-Website](http://airbnb.com/).
+First project in the AirBnB clone series is about laying the framework for a simple AirBnB[Website](http://airbnb.com/) clone.\
+We have created some base classes for recieving, serializing and deserializtion of information along with creating a console using Class cmd for added control of handling the information.

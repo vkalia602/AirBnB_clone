@@ -24,8 +24,8 @@ class BaseModel():
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             models.storage.new(self)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class BaseModel():
         """
         Method that saves an instance
         """
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
@@ -63,12 +63,3 @@ class BaseModel():
                 my_dict[key] = val
         my_dict['__class__'] = self.__class__.__name__
         return my_dict
-        """lee
-        json_dict = self.__dict__
-        json_dict['__class__'] = type(self).__name__
-        if type(json_dict['created_at']) is datetime:
-            json_dict['created_at'] = self.created_at.isoformat()
-        if type(json_dict['updated_at']) is datetime:
-            json_dict['updated_at'] = self.updated_at.isoformat()
-        return json_dict
-        """

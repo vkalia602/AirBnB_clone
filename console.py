@@ -1,6 +1,20 @@
 #!/usr/bin/python3
 
-"""console for hbnb"""
+"""
+Console: module for the HBNBCommand class
+Contains the following commands used to work with the models:
+
+        create - creates a new instance of a model
+        show - prints the string representation of an instance
+        destroy - deletes an instance from storage
+        all - displays all instances of a class or all classes
+        update - updates the attributes of an instance
+        EOF - allows Ctrl-D / Ctrl-Z to exit the console
+        quit - allows the console to exit when user enters 'quit'
+        emptyline - does nothing if user doesn't enter a command
+
+Valid models: BaseModel, User, Place, State, City, Amenity, Review
+"""
 
 import cmd
 import json
@@ -8,20 +22,34 @@ from models.base_model import BaseModel
 from models import storage
 from datetime import datetime
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 
 
 class HBNBCommand(cmd.Cmd):
-    """hbnb console class"""
+    """
+    HBNBCommand class: utilizes cmd.Cmd to create a shell interface that allows
+    users to create, display, update, and/or delete models.
+    """
+
     prompt = '(hbnb) '
-    classes = {'BaseModel', 'User'}
-    # ^^^^ used to check arguments of create() and show()
+    classes = {'BaseModel', 'User', 'Place',
+               'State', 'City', 'Amenity', 'Review'}
+    # ^^^^^ these are considered valid models
     fp = storage._FileStorage__file_path
-    # ^^^^ easier name
+    # ^^^^^ alias for the storage file path
 
     def do_create(self, token):
-        """creates a new instance of BaseModel, saves it to JSON file
-        and prints the id of the BaseModel instance"""
-        if token == "":
+        """
+        creates a new instance of a model if it's valid, saves it to the
+        json file (set in engine.FileStorage), then prints it's id.
+
+        usage: create <class_name>
+        """
+        if token == '':
             print('** class name missing **')
         elif token not in self.classes:
             print('** class doesn\'t exist **')
@@ -31,8 +59,11 @@ class HBNBCommand(cmd.Cmd):
             print(new.id)
 
     def do_show(self, line):
-        """prints the string representation of an instance based on the class
-        name and id"""
+        """
+        prints the string representation of an instance
+
+        usage: show <class_name> <id>
+        """
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if len(tokens) == 0:
             print('** class name missing **')
@@ -62,8 +93,11 @@ class HBNBCommand(cmd.Cmd):
             print('** no instance found **')
 
     def do_destroy(self, line):
-        """deletes an instance based on the class name and id and saves the
-        changes into the JSON file"""
+        """
+        destroy: deletes an instance and saves the changes into storage
+
+        usage: destroy <class_name> <id>
+        """
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
         if len(tokens) == 0:
             print('** class name missing **')
@@ -90,8 +124,11 @@ class HBNBCommand(cmd.Cmd):
                         print('** no instance found **')
 
     def do_all(self, line):
-        """prints all string representation of all instances based
-        or not on the class name"""
+        """
+        all: prints the string representation of all objects
+
+        usage: all [<class_name>]
+        """
         try:
             with open(self.fp, encoding='utf-8') as f:
                 data = json.load(f)
@@ -105,7 +142,7 @@ class HBNBCommand(cmd.Cmd):
             print('** class doesn\'t exist **')
             return
         else:
-            class_name = None   # all (with no args)
+            class_name = None   # if class_name is none, display ALL instances
         if data:
             if class_name is not None:
                 for key, val in data.items():
@@ -122,20 +159,20 @@ class HBNBCommand(cmd.Cmd):
             if len(models) > 0:
                 print(models)
         if data is None and len(tokens) > 0 and class_name is not None:
+            # example: all BaseModel should print nothing is there's no data
             pass
 
     def do_update(self, line):
-        """updates an instance based on the class name and id by adding or
-        updating attribute and saves the change into the JSON file
+        """
+        update: updates an instance and saves the changes to storage
 
-        usage: update <class name> <id> <attribute name> "<attribute value>"""
+        usage: update <class name> <id> <attribute name> "<attribute value>"
+        """
         tokens = line.split()
         if len(tokens) == 0:
             print('** class name missing **')
-        # tokens[0] is <class name>
         elif tokens[0] not in self.classes:
             print('** class doesn\'t exist **')
-        # tokens[1] is <id>
         elif len(tokens) < 2:
             print('** instance id missing **')
         else:
@@ -157,6 +194,7 @@ class HBNBCommand(cmd.Cmd):
                             attr_name = tokens[2]
                             attr_value = tokens[3]
                             # values need to be wrapped in double quotes ("")
+                            # if there is whitespace
                             attr_values = []
                             for word in tokens[3:]:
                                 if word[0] == '"':
@@ -171,19 +209,24 @@ class HBNBCommand(cmd.Cmd):
                             storage._FileStorage__objects[key] = instance
                             storage.save()
                             return
-                else:
                     print('** no instance found **')
 
     def do_EOF(self, line):
-        """exits the console program on EOF"""
+        """
+        EOF: exits the console program on EOF (Ctrl-D / Ctrl-Z)
+        """
         return True
 
     def do_quit(self, line):
-        """exits the console program if user enters 'quit'\n"""
+        """
+        quit: exits the console program if user enters 'quit'
+        """
         return True
 
     def emptyline(self):
-        """does nothing when user presses enter"""
+        """
+        emptyline: does nothing when user presses enter
+        """
         pass
 
 

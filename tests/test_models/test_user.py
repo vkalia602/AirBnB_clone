@@ -17,8 +17,7 @@ class TestUserModel(unittest.TestCase):
 
     def test_User_has_email_attr(self):
         """tests that User.email exists"""
-        user = User()
-        self.assertEqual('email' in user.__dict__, True)
+        self.assertEqual('email' in User.__dict__, True)
 
     def test_email_is_a_string(self):
         """tests that User.email is a string"""
@@ -27,8 +26,7 @@ class TestUserModel(unittest.TestCase):
 
     def test_User_has_password_attr(self):
         """tests that User.password exists"""
-        user = User()
-        self.assertEqual('password' in user.__dict__, True)
+        self.assertEqual('password' in User.__dict__, True)
 
     def test_password_is_a_string(self):
         """tests that User.password is a string"""
@@ -37,8 +35,7 @@ class TestUserModel(unittest.TestCase):
 
     def test_User_has_first_name_attr(self):
         """tests that User.first_name exists"""
-        user = User()
-        self.assertEqual('first_name' in user.__dict__, True)
+        self.assertEqual('first_name' in User.__dict__, True)
 
     def test_first_name_is_a_string(self):
         """tests that User.first_name is a string"""
@@ -47,8 +44,7 @@ class TestUserModel(unittest.TestCase):
 
     def test_User_has_last_name_attr(self):
         """tests that User.last_name exists"""
-        user = User()
-        self.assertEqual('last_name' in user.__dict__, True)
+        self.assertEqual('last_name' in User.__dict__, True)
 
     def test_last_name_is_a_string(self):
         """tests that User.last_name is a string"""

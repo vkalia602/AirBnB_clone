@@ -14,6 +14,12 @@ class User(BaseModel):
     """
     class BaseModel
     """
+    email = ''
+    password = ''
+    first_name = ''
+    last_name = ''
+
+
     def __init__(self, *args, **kwargs):
         """User constructor, inheriting id, created_at, updated_at
         from BaseModel"""
@@ -28,8 +34,8 @@ class User(BaseModel):
                     self.first_name = val
                 elif key == 'last_name':
                     self.last_name = val
-        else:
-            self.email = ""
-            self.password = ""
-            self.first_name = ""
-            self.last_name = ""
+#        else:
+#            self.email = ""
+#            self.password = ""
+#            self.first_name = ""
+#            self.last_name = ""

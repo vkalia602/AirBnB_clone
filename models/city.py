@@ -32,18 +32,3 @@ class City(BaseModel):
     """
     state_id = ''
     name = ''
-
-    def __init__(self, *args, **kwargs):
-        """
-        init: constructor for City instances. inherits created_at, updated_at
-        and id attributes from BaseModel
-        """
-        super().__init__(self, *args, **kwargs)
-        if kwargs:
-            for key, val in kwargs.items():
-                if key == 'name':
-                    self.name = val
-                elif key == 'state_id':
-                    self.state_id = val
-        else:
-            self.name = City.name

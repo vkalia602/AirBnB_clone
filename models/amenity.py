@@ -31,16 +31,3 @@ class Amenity(BaseModel):
     Amenity: class for Amenity models. inherits from BaseModel
     """
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        """
-        init: constructor for Amenity instances. inherits created_at,
-        updated_at and id attributes from BaseModel
-        """
-        super().__init__(self, *args, **kwargs)
-        if kwargs:
-            for key, val in kwargs.items():
-                if key == 'name':
-                    self.name = val
-        else:
-            self.name = Amenity.name

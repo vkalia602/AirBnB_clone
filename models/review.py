@@ -33,22 +33,3 @@ class Review(BaseModel):
     place_id = ""
     user_id = ""
     text = ""
-
-    def __init__(self, *args, **kwargs):
-        """
-        init: constructor for Review instances. inherits created_at, updated_at
-        and id attributes from BaseModel
-        """
-        super().__init__(self, *args, **kwargs)
-        if kwargs:
-            for key, val in kwargs.items():
-                if key == 'place_id':
-                    self.place_id = val
-                elif key == 'user_id':
-                    self.user_id = val
-                elif key == 'text':
-                    self.text = val
-        else:
-            self.place_id = Review.place_id
-            self.user_id = Review.user_id
-            self.text = Review.text

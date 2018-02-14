@@ -79,9 +79,9 @@ class HBNBCommand(cmd.Cmd):
                 except FileNotFoundError:
                     data = None
                 if data:
-                    clas = tokens[0]
-                    uuid = tokens[1]
-                    key = "{}.{}".format(clas, uuid)
+                    class_name = tokens[0]
+                    instance_id = tokens[1]
+                    key = "{}.{}".format(class_name, instance_id)
                     if key in data.keys():
                         del data[key]
                         storage._FileStorage__objects = data

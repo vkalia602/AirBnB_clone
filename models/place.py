@@ -2,9 +2,14 @@
 """
 Method for the place class
 """
+from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """
+    Class Place inherited from BaseModel
+    """
+
     city_id = ""
     user_id = ""
     name = ""

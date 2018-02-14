@@ -16,11 +16,14 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """BaseModel instance constructor"""
+
+        if args:
+            pass
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if key in ["created_at", "updated_at"]:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if '__class__' not in key:
+                if key not in  ['__class__', 'id']:
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
@@ -49,6 +52,7 @@ class BaseModel():
         Method that saves an instance
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):

@@ -12,7 +12,7 @@ from datetime import datetime
 class HBNBCommand(cmd.Cmd):
     """hbnb console class"""
     prompt = '(hbnb) '
-    classes = {'BaseModel'}
+    classes = {'BaseModel', 'User'}
     # ^^^^ used to check arguments of create() and show()
     fp = storage._FileStorage__file_path
     # ^^^^ easier name
@@ -55,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
                     del val['__class__']
                     if keystring in data.keys():
                         obj_dict = data[key]
-                        obj = BaseModel(**obj_dict)
+                        obj = eval(clas)(**obj_dict)
                         print(obj)
                         return
             print('** no instance found **')
@@ -170,7 +170,8 @@ class HBNBCommand(cmd.Cmd):
                             storage._FileStorage__objects[key] = instance
                             storage.save()
                             return
-            print('** no instance found **')
+                else:
+                    print('** no instance found **')
 
     def do_EOF(self, line):
         """exits the console program on EOF"""

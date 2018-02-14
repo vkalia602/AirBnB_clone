@@ -14,6 +14,8 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     classes = {'BaseModel'}
     # ^^^^ used to check arguments of create() and show()
+    fp = storage._FileStorage__file_path
+    # ^^^^ easier name
 
     def do_create(self, token):
         """creates a new instance of BaseModel, saves it to JSON file
@@ -39,8 +41,7 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             try:
-                with open(storage._FileStorage__file_path, encoding='utf-8')
-                as f:
+                with open(self.fp, encoding='utf-8') as f:
                     data = json.load(f)
             except FileNotFoundError:
                 data = None
@@ -72,9 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 print('** instance id missing **')
             elif len(tokens) > 1:
                 try:
-                    with
-                    open(storage._FileStorage__file_path, encoding='utf-8')
-                    as f:
+                    with open(self.fp, encoding='utf-8') as f:
                         data = json.load(f)
                 except FileNotFoundError:
                     data = None
@@ -93,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
         """prints all string representation of all instances based
         or not on the class name"""
         try:
-            with open(storage._FileStorage__file_path, encoding='utf-8') as f:
+            with open(self.fp, encoding='utf-8') as f:
                 data = json.load(f)
         except FileNotFoundError:
             data = None
@@ -102,6 +101,9 @@ class HBNBCommand(cmd.Cmd):
             models = []
             if len(tokens) > 0 and tokens[0] in self.classes:
                 class_name = tokens[0]
+            elif len(tokens) > 0 and tokens[0] not in self.classes:
+                print('** class doesn\'t exist **')
+                return
             else:
                 class_name = None
             for key, val in data.items():
@@ -137,8 +139,7 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             try:
-                with
-                open(storage._FileStorage__file_path, encoding='utf-8') as f:
+                with open(self.fp, encoding='utf-8') as f:
                     data = json.load(f)
             except FileNotFoundError:
                 data = None

@@ -7,6 +7,7 @@ import json
 from models.base_model import BaseModel
 from models import storage
 from datetime import datetime
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -97,31 +98,31 @@ class HBNBCommand(cmd.Cmd):
         except FileNotFoundError:
             data = None
         tokens = line.split()   # tokens[0] will be 1st arg (<class name>)
-        if data:
-            models = []
-            if len(tokens) > 0 and tokens[0] in self.classes:
-                class_name = tokens[0]
-            elif len(tokens) > 0 and tokens[0] not in self.classes:
-                print('** class doesn\'t exist **')
-                return
-            else:
-                class_name = None
-            for key, val in data.items():
-                if class_name in self.classes or class_name is None:
-                    if class_name is not None:
-                        del val['__class__']
-                        model = eval(class_name)(**val)
-                    else:
-                        class_name = val['__class__']
-                        del val['__class__']
-                        model = eval(class_name)(**val)
-                    models.append(model)
-                else:
-                    print('** class doesn\'t exist **')
-                    return
-            print(models)
-        if len(tokens) > 0 and data is None:
+        models = []
+        if len(tokens) > 0 and tokens[0] in self.classes:
+            class_name = tokens[0]
+        elif len(tokens) > 0 and tokens[0] not in self.classes:
             print('** class doesn\'t exist **')
+            return
+        else:
+            class_name = None   # all (with no args)
+        if data:
+            if class_name is not None:
+                for key, val in data.items():
+                    if val['__class__'] == class_name:
+                        del val['__class__']
+                        model = eval(class_name)(**val)
+                        models.append(model)
+            elif class_name is None:
+                for key, val in data.items():
+                    class_name = val['__class__']
+                    del val['__class__']
+                    model = eval(class_name)(**val)
+                    models.append(model)
+            if len(models) > 0:
+                print(models)
+        if data is None and len(tokens) > 0 and class_name is not None:
+            pass
 
     def do_update(self, line):
         """updates an instance based on the class name and id by adding or

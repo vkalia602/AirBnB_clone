@@ -13,7 +13,6 @@ class FileStorage:
             example: {'BaseModel.123abc-456def': {'id': '123abc', ...}}"""
     __file_path = 'file.json'
     __objects = {}
-    #datetime_keys = {'created_at', 'updated_at'}
 
     def all(self):
         """returns the dict __objects"""
@@ -28,8 +27,8 @@ class FileStorage:
     def save(self):
         """serializes __objects to the JSON file __file_path"""
         new_dict = {}
-        for key, value in self.__objects.items():
-            new_dict[key] = value.to_dict()
+        for keystring, obj in self.__objects.items():
+            new_dict[keystring] = obj.to_dict()
         with open(self.__file_path, mode="w+", encoding="UTF-8") as my_file:
             json.dump(new_dict, my_file)
         """ lee
@@ -46,9 +45,8 @@ class FileStorage:
     def reload(self):
         """deserializes the JSON file to __objects if JSON file exists"""
         if os.path.isfile(self.__file_path):
-            if os.stat(self.__file_path).st_size != 0:
-                with open(self.__file_path, mode='r', encoding="UTF-8") as my_file:
-                    new_object = json.load(my_file)
+            with open(self.__file_path, mode='r', encoding="UTF-8") as my_file:
+                new_object = json.load(my_file)
             for key, value in new_object.items():
                 class_name = value['__class__']
                 del value['__class__']

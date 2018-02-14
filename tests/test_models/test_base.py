@@ -81,7 +81,6 @@ class TestBaseModel(unittest.TestCase):
         update1 = model.updated_at
         model.save()
         update2 = model.updated_at
-        update2 = datetime.datetime.strptime(update2, '%Y-%m-%dT%H:%M:%S.%f')
         self.assertEqual(update1 < update2, True)
 
     def test_updated_at_changes_each_time_save_is_called(self):

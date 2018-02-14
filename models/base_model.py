@@ -24,8 +24,8 @@ class BaseModel():
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = (datetime.now())
-            self.updated_at = (datetime.now())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             models.storage.new(self)
 
     def __str__(self):
@@ -55,10 +55,13 @@ class BaseModel():
         """
         Method that creates a dictionary representation of an instance
         """
-        my_dict = self.__dict__
+        my_dict = {}
+        for key, val in self.__dict__.items():
+            if key in ['created_at', 'updated_at']:
+                my_dict[key] = val.isoformat()
+            else:
+                my_dict[key] = val
         my_dict['__class__'] = self.__class__.__name__
-        my_dict['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        my_dict['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         return my_dict
         """lee
         json_dict = self.__dict__

@@ -31,35 +31,14 @@ class FileStorage:
             new_dict[keystring] = obj.to_dict()
         with open(self.__file_path, mode="w+", encoding="UTF-8") as my_file:
             json.dump(new_dict, my_file)
-        """ lee
-        json_dict = {}
-        for keystring, obj in self.__objects.items():
-            if type(obj) is not dict:
-                json_dict[keystring] = obj.to_dict()
-            elif type(obj) is dict:
-                json_dict[keystring] = obj
-        with open(self.__file_path, 'w', encoding='UTF-8') as json_file:
-            json.dump(json_dict, json_file)
-            """
 
     def reload(self):
         """deserializes the JSON file to __objects if JSON file exists"""
         if os.path.isfile(self.__file_path):
-            with open(self.__file_path, mode='r', encoding="UTF-8") as my_file:
-                new_object = json.load(my_file)
-            for key, value in new_object.items():
-                class_name = value['__class__']
-                del value['__class__']
-                self.__objects[key] = eval(class_name)(**value)
-        """lee
-        new_object = {}
-        try:
-            with open(self.__file_path, encoding='UTF-8') as f:
-                new_object = json.load(f)
-        except FileNotFoundError:
-            pass
-        for key, val in new_object.items():
-            class_name = val['__class__']
-            del val['__class__']
-            self.__objects[key] = eval(class_name)(**val)
-        """
+            if os.stat(self.__file_path).st_size != 0:
+                with open(self.__file_path, encoding='UTF-8') as my_file:
+                    new_object = json.load(my_file)
+                for key, value in new_object.items():
+                    class_name = value['__class__']
+                    del value['__class__']
+                    self.__objects[key] = eval(class_name)(**value)

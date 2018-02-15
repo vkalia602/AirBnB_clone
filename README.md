@@ -11,9 +11,25 @@ Creation and testing-
 * PEP8 styling
 
 ## Installation
-This repository can be clones using the git provided url:
-``` $ git clone https://github.com/eightlimbed/AirBnB_clone.git ```
-To start the console:
-``` ~/AirBnB_clone$ ./console ```
+This repository can be clones using the git provided url:\
+``` $ git clone https://github.com/eightlimbed/AirBnB_clone.git ```\
+To start the console:\
+``` ~/AirBnB_clone$ ./console ```\
+
+## Repository Contents
+### Directories and Classes
+| Directory   | Class         | Description                                                                         |
+|-------------|---------------|-------------------------------------------------------------------------------------|
+| Model       | BaseModel     | Defines all common attributes/methods for other classes                             |
+|             | Amenity       | Defines amenities available                                                         |
+|             | City          | Defines state id and name of the city                                               |
+|             | Place         | Defines attributes like price by night, city id, number of rooms etc                |
+|             | Review        | Defines attributes like place id, user id and text description                      |
+|             | State         | Defines state name                                                                  |
+|             | User          | Defines user attributes like email, password, first and last names                  |
+| model/engine| FileStorage   | Class to create, save and reload instances                                          |
+| console     | HBNBCommand   | Inherited from class cmd that will create, show, destroy, update and print instances|
+
+
 
 

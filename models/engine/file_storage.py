@@ -85,3 +85,5 @@ class FileStorage:
                     class_name = value['__class__']
                     del value['__class__']
                     self.__objects[key] = eval(class_name)(**value)
+        else:
+            pass

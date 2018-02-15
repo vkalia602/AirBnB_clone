@@ -16,14 +16,13 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """BaseModel instance constructor"""
-
         if args:
             pass
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if key in ["created_at", "updated_at"]:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key not in  ['__class__']:
+                if key not in ['__class__']:
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())

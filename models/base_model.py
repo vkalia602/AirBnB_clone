@@ -16,6 +16,8 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """BaseModel instance constructor"""
+        if args is not None and len(args) > 0:
+            pass
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if key in ["created_at", "updated_at"]:
@@ -49,7 +51,7 @@ class BaseModel():
         """
         Method that saves an instance
         """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
 

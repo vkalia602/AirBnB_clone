@@ -10,12 +10,6 @@ Creation and testing-
 * Python 3
 * PEP8 styling
 
-## Installation
-This repository can be clones using the git provided url:\
-``` $ git clone https://github.com/eightlimbed/AirBnB_clone.git ```\
-To start the console:\
-``` ~/AirBnB_clone$ ./console ```
-
 ## Repository Contents
 ### Directories and Classes
 | Directory        | Class         | Description                                                                         |
@@ -37,7 +31,17 @@ To start the console:\
 |                  | TestStateModel| Unittest for cases of state class                                                   |
 |                  | TestUserModel | Unittest for cases of User class                                                    |
 | tests/test_models/engine| TestFileStorage | Unittests to test File storage class                                       |
+
+## Installation
+This repository can be clones using the git provided url:\
+``` $ git clone https://github.com/eightlimbed/AirBnB_clone.git ```\
+
 ## Console
+The console is used to create, update, destroy and print instances of the classes.\
+
+To start the console:\
+``` ~/AirBnB_clone$ ./console ```
+
 Example of use:
 ```
 AirBnB_clone$ ./console.py
@@ -51,3 +55,14 @@ c93ddfb5-f80c-4a70-bd9a-6c922e384a46
 ** instance id missing **
 
 ```
+## Testing
+The code can be tested using unittest in the tests directory by using the following command-
+```AirBnB_clone$ python3 -m unittest discover tests```
+
+## Bugs
+This program is the embodiment of perfection. So no bugs.
+
+## Credit
+*Lee Gaines* - [Github](https://github.com/eightlimbed) || [Twitter](https://twitter.com/eightlimbed)
+
+*Halina Veratsennik* - [Github](https://github.com/vkalia602) || [Twitter](https://twitter.com/fallenicicle)

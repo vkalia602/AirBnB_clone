@@ -65,4 +65,4 @@ This program is the embodiment of perfection. So no bugs.
 ## Credit
 *Lee Gaines* - [Github](https://github.com/eightlimbed) || [Twitter](https://twitter.com/eightlimbed)
 
-*Halina Veratsennik* - [Github](https://github.com/vkalia602) || [Twitter](https://twitter.com/fallenicicle)
+*Sue Kalia* - [Github](https://github.com/vkalia602) || [Twitter](https://twitter.com/fallenicicle)

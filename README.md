@@ -18,18 +18,25 @@ To start the console:\
 
 ## Repository Contents
 ### Directories and Classes
-| Directory   | Class         | Description                                                                         |
-|-------------|---------------|-------------------------------------------------------------------------------------|
-| Model       | BaseModel     | Defines all common attributes/methods for other classes                             |
-|             | Amenity       | Defines amenities available                                                         |
-|             | City          | Defines state id and name of the city                                               |
-|             | Place         | Defines attributes like price by night, city id, number of rooms etc                |
-|             | Review        | Defines attributes like place id, user id and text description                      |
-|             | State         | Defines state name                                                                  |
-|             | User          | Defines user attributes like email, password, first and last names                  |
-| model/engine| FileStorage   | Class to create, save and reload instances                                          |
-| console     | HBNBCommand   | Inherited from class cmd that will create, show, destroy, update and print instances|
-
+| Directory        | Class         | Description                                                                         |
+|------------------|---------------|-------------------------------------------------------------------------------------|
+| Model            | BaseModel     | Defines all common attributes/methods for other classes                             |
+|                  | Amenity       | Defines amenities available                                                         |
+|                  | City          | Defines state id and name of the city                                               |
+|                  | Place         | Defines attributes like price by night, city id, number of rooms etc                |
+|                  | Review        | Defines attributes like place id, user id and text description                      |
+|                  | State         | Defines state name                                                                  |
+|                  | User          | Defines user attributes like email, password, first and last names                  |
+| model/engine     | FileStorage   | Class to create, save and reload instances                                          |
+| console          | HBNBCommand   | Inherited from class cmd that will create, show, destroy, update and print instances|
+| tests/test_models| Test_Amenity  | Testing methods in amenity                                                          |
+|                  | TestBaseModel | Testing methods in BaseModel class                                                  |
+|                  | TestCityModel | Testing class city attributes in BaseModel class                                    |
+|                  | TestPlaceModel| Testing class city	attributes in BaseModel	class                                    |
+|                  | TestReviewModel| Unittest cases for review class                                                    |
+|                  | TestStateModel| Unittest for cases of state class                                                   |
+|                  | TestUserModel | Unittest for cases of User class                                                    |
+| tests/test_models/engine| TestFileStorage | Unittests to test File storage class                                       |
 ## Console
 Example of use:
 ```

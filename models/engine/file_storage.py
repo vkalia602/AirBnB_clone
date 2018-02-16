@@ -46,7 +46,7 @@ class FileStorage:
         """
         all: returns the dictionary of all objects
         """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """
